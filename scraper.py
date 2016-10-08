@@ -61,5 +61,5 @@ for player_id in player_ids:
     done.append(player_id)
     print(len(done),'/',total)
 
-c.commit()
+c.comit()
 c.close()
