@@ -4,7 +4,7 @@ DB_FILE = 'data.sqlite'
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
 
-c.execute("DROP TABLE IF EXISTS data (data)")
+c.execute("DROP TABLE IF EXISTS data")
 c.execute("CREATE TABLE IF NOT EXISTS data (data)")
 
 req = requests.Session()
@@ -44,7 +44,7 @@ for player_id in player_ids:
         player['height'] = site.split('>Height<')[1].split('info">',1)[1].split('</',1)[0]
         player['weight'] = site.split('>Weight<')[1].split('info">',1)[1].split('</',1)[0]
 
-        c.execute('INSERT INTO data VALUES(?)',[player])
+        c.execute('INSERT INTO data VALUES(?)',[json.dumps(player)])
         
         print('Done',player_id)
         done.append(player_id)
