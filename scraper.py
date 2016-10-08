@@ -24,7 +24,6 @@ done = []
 total = len(player_ids)
 for player_id in player_ids:
     player = {'id':player_id}
-    player_id = '20789'
     site = req.get(link.format(player_id,'stats'),headers=headers).text
     if 'allStatContainer' not in site:
         print('nothing for',player_id)
