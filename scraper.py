@@ -23,34 +23,43 @@ link = 'https://www.premierleague.com/players/{0}/player/{1}'
 done = []
 total = len(player_ids)
 for player_id in player_ids:
+    player = {'id':player_id}
+    player_id = '20789'
+    site = req.get(link.format(player_id,'stats'),headers=headers).text
+    if 'allStatContainer' not in site:
+        print('nothing for',player_id)
+        continue
+    data = {}
+    for row in site.split('allStatContainer')[1:]:
+        name = row.split('data-stat="')[1].split('"',1)[0]
+        stat = row.split('>')[1].split('</',1)[0].strip()
+        data[name] = stat
+    player['data'] = data
+
+    site = req.get(link.format(player_id,'overview'),headers=headers).text
     try:
-        player = {'id':player_id}
-        
-        site = req.get(link.format(player_id,'stats'),headers=headers).text
-        if 'allStatContainer' not in site:
-            print('nothing for',player_id)
-            continue
-        data = {}
-        for row in site.split('allStatContainer')[1:]:
-            name = row.split('data-stat="')[1].split('"',1)[0]
-            stat = row.split('>')[1].split('</',1)[0].strip()
-            data[name] = stat
-        player['data'] = data
-
-        site = req.get(link.format(player_id,'overview'),headers=headers).text
         player['nationality'] = site.split('playerCountry">')[1].split('</',1)[0]
+    except:
+        print('no nationality')
+    try:
         dob = site.split('>Date of Birth<')[1].split('info">',1)[1].split('</',1)[0]
-        player['dob'] = str(dateutil.parser.parse(dob).date())
+    except:
+        print('no dob')
+    player['dob'] = str(dateutil.parser.parse(dob).date())
+    try:
         player['height'] = site.split('>Height<')[1].split('info">',1)[1].split('</',1)[0]
+    except:
+        print('no height')
+    try:
         player['weight'] = site.split('>Weight<')[1].split('info">',1)[1].split('</',1)[0]
-
-        c.execute('INSERT INTO data VALUES(?)',[json.dumps(player)])
+    except:
+        print('no weight')
         
-        print('Done',player_id)
-        done.append(player_id)
-        print(len(done),'/',total)
-    except IndexError:
-        print('Error:',player_id)
+    c.execute('INSERT INTO data VALUES(?)',[json.dumps(player)])
+    
+    print('Done',player_id)
+    done.append(player_id)
+    print(len(done),'/',total)
 
 c.commit()
 c.close()
