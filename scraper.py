@@ -44,7 +44,7 @@ for player_id in player_ids:
     except:
         print('no nationality')
     try:
-        dob = site.split('>Date of Birth<')[1].split('info">',1)[1].split('</',1)[0]
+        dob = site.split('>Date of Birth<')[1].split('info">',1)[1].split('<',1)[0]
     except:
         print('no dob')
     player['dob'] = str(dateutil.parser.parse(dob).date())
