@@ -53,7 +53,7 @@ for player_id in player_ids:
     except:
         print('no height')
     try:
-        player['weight'] = site.split('>Weight<')[1].split('info">',1)[1].split('</',1)[0]
+        player['weight'] = site.split('>Weight<')[1].split('Kg',1)[0].split('>',1)[1]
     except:
         print('no weight')
         
