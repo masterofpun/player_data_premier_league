@@ -37,7 +37,7 @@ for player_id in player_ids:
 
     site = req.get(link.format(player_id,'overview'),headers=headers).text
     
-    player['name'] = site.split('<div class="name">')[1].split('<',1)[0]
+    player['name'] = site.split('<div class="name t-colour">')[1].split('<',1)[0]
     
     try:
         player['nationality'] = site.split('playerCountry">')[1].split('</',1)[0]
